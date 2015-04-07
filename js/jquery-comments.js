@@ -11,7 +11,7 @@
 
         options: {
             profilePictureURL: '', 
-            
+            masonryCallback: '',
             // Font awesome icon overrides
             spinnerIconURL: '',
             upvoteIconURL: '',
@@ -56,6 +56,7 @@
 
             fieldMappings: {
                id: 'id',
+               uniqueid: 'uniqueid',
                parent: 'parent',
                created: 'created',
                modified: 'modified',
@@ -576,6 +577,7 @@
 
             var time = new Date().toISOString();
             var commentJSON = {
+                uniqueid: $(this.$el).attr('data-id'),
                 id: 'c' +  (this.getComments().length + 1),   // Temporary id
                 parent: textarea.attr('data-parent') || null,
                 created: time,
@@ -677,6 +679,7 @@
             var el = $(ev.currentTarget);
             el.siblings('.hidden-reply').toggleClass('visible');
             this.setToggleAllButtonText(el, true);
+            this.options.masonryCallback();
         },
 
         replyButtonClicked: function(ev) {
@@ -770,14 +773,17 @@
             var self = this;
 
             // Commenting field
-            var mainCommentingField = this.createCommentingFieldElement();
-            mainCommentingField.addClass('main');
-            this.$el.append(mainCommentingField);
+            if (this.options.enableEditing){
+                var mainCommentingField = this.createCommentingFieldElement();
+                mainCommentingField.addClass('main');
+                this.$el.append(mainCommentingField);
 
-            // Hide control row and close button
-            var mainControlRow = mainCommentingField.find('.control-row');
-            mainControlRow.hide();
-            mainCommentingField.find('.close').hide();
+                // Hide control row and close button
+                var mainControlRow = mainCommentingField.find('.control-row');
+                mainControlRow.hide();
+                mainCommentingField.find('.close').hide();
+            }
+
 
             // Navigation bar
             this.$el.append(this.createNavigationElement());
@@ -1249,6 +1255,8 @@
                 var maxRowsUsed = this.options.textareaMaxRows == false ? 
                     false : rowCount > this.options.textareaMaxRows;
             } while(isAreaScrollable && !maxRowsUsed);
+
+            this.options.masonryCallback();
         },
 
         clearTextarea: function(textarea) {
