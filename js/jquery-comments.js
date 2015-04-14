@@ -10,8 +10,10 @@
         currentSortKey: '',
 
         options: {
+            isAuthenticated: false,
             profilePictureURL: '', 
             masonryCallback: '',
+            loginUrl: '/',
             // Font awesome icon overrides
             spinnerIconURL: '',
             upvoteIconURL: '',
@@ -772,6 +774,16 @@
         createHTML: function() {
             var self = this;
 
+            if (!this.options.isAuthenticated){
+                var bt = $('<button/>',{
+                    class: 'add-comment',
+                    html: 'Добавить коментарий'
+                });
+                this.$el.append(bt)
+                bt.click(function(){
+                    location.href = self.options.loginUrl;
+                });
+            }
             // Commenting field
             if (this.options.enableEditing){
                 var mainCommentingField = this.createCommentingFieldElement();
