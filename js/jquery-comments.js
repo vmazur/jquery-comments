@@ -828,7 +828,7 @@
                 noCommentsIcon.css('background-image', 'url("'+this.options.noCommentsIconURL+'")');
                 noCommentsIcon.addClass('image');
             }
-            noComments.prepend($('<br/>')).prepend(noCommentsIcon);
+            noComments.prepend(noCommentsIcon);
             this.$el.append(noComments);
         },
 
